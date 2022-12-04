@@ -23,14 +23,14 @@ namespace AssemblyBrowser
 
             AssemblyInfo assemblyInfo = new(assembly.GetName().Name, assemblyPath);
             var namespaces = assembly.GetTypes().Select(type => type.Namespace).Distinct().ToList();
-            namespaces.ForEach(ns =>
+            namespaces.ForEach(_namespace =>
             {
                 NamespaceInfo namespaceInfo = new();
-                assemblyInfo.NamespaceInfos.Add(ns, namespaceInfo);
+                assemblyInfo.NamespaceInfos.Add(_namespace, namespaceInfo);
 
-                var classes = assembly.GetTypes().Where(type => type.IsClass && type.Namespace == ns).ToList();
+                var classes = assembly.GetTypes().Where(type => type.IsClass && type.Namespace == _namespace).ToList();
 
-                classes.ForEach(clas =>
+                classes.ForEach(_class=>
                 {
                    
                 });
