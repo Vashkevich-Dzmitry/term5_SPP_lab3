@@ -10,11 +10,9 @@ namespace AssemblyBrowser.Data
     {
         private Dictionary<string, MemberInfo> _memberInfos;
         public Dictionary<string, MemberInfo> MemberInfos { get { return _memberInfos; } }
-        public string Name { get; }
-        public ClassInfo(string name)
+        public ClassInfo()
         {
             _memberInfos = new Dictionary<string, MemberInfo>();
-            Name = name;
         }
     }
 }
