@@ -1,10 +1,22 @@
 ﻿using System.Reflection;
 using AssemblyBrowser.Data;
+using AssemblyBrowser.MemberGenerators;
 
 namespace AssemblyBrowser
 {
     public class AssembleBrowser
     {
+        private static readonly Dictionary<MemberTypes, IMemberInfoGenerator> _memberInfoGenerators;
+        static AssembleBrowser()
+        {
+            _memberInfoGenerators = new Dictionary<MemberTypes, IMemberInfoGenerator>
+            {
+                { MemberTypes.Field, new FieldInfoGenerator() },
+                { MemberTypes.Property, new PropertyInfoGenerator() },
+                { MemberTypes.Method, new MethodInfoGenerator() }
+            };
+        }
+
         public static AssemblyInfo GetAssemblyInfo(string assemblyPath)
         {
             Assembly assembly;
@@ -21,22 +33,32 @@ namespace AssemblyBrowser
                 throw new Exception("NotAnAssembly: " + assemblyPath, e);
             }
 
-            AssemblyInfo assemblyInfo = new(assembly.GetName().Name, assemblyPath);
-            var namespaces = assembly.GetTypes().Select(type => type.Namespace).Distinct().ToList();
-            namespaces.ForEach(_namespace =>
+            AssemblyInfo modelAssemblyInfo = new(assembly.GetName().Name, assemblyPath);
+            
+            Type[] types = assembly.GetTypes();
+
+            foreach (Type type in types)
             {
-                NamespaceInfo namespaceInfo = new();
-                assemblyInfo.NamespaceInfos.Add(_namespace, namespaceInfo);
-
-                var classes = assembly.GetTypes().Where(type => type.IsClass && type.Namespace == _namespace).ToList();
-
-                classes.ForEach(_class=>
+                foreach (System.Reflection.MemberInfo memberInfo in type.GetMembers(
+                    BindingFlags.Public
+                    | BindingFlags.NonPublic
+                    | BindingFlags.Instance
+                    | BindingFlags.Static
+                    | BindingFlags.DeclaredOnly))
                 {
-                   
-                });
-            });
+                    string namespaceName = type.Namespace ?? "global";
+                    string className = type.Name;
+                    if (_memberInfoGenerators.ContainsKey(memberInfo.MemberType))
+                    {
+                        var modelMemberInfo = _memberInfoGenerators[memberInfo.MemberType].GenerateMemberInfo(memberInfo, namespaceName, className);
+                        var modelNamespaceInfo = modelAssemblyInfo.AddOrGetNamespaceInfo(namespaceName);
+                        var modelClassInfo = modelNamespaceInfo.AddOrGetClassInfo(className);
+                        modelClassInfo.AddMemberInfo(modelMemberInfo);
+                    }
+                }
+            }
 
-            return assemblyInfo;
+            return modelAssemblyInfo;
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace AssemblyBrowser.MemberGenerators
 {
-    internal class FieldInfoGenerator : IMemberInfoGenerator
+    internal class PropertyInfoGenerator : IMemberInfoGenerator
     {
         MemberInfo IMemberInfoGenerator.GenerateMemberInfo(System.Reflection.MemberInfo memberInfo, string namespaceName, string className)
         {
