@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace AssemblyBrowser.Data
 {
-    public class MemberInfo
+    public abstract class MemberInfo
     {
+        public string Name { get; set; }
+        public bool IsStatic { get; set; }
     }
 }

@@ -10,10 +10,12 @@ namespace AssemblyBrowser.Data
     {
         private Dictionary<string, ClassInfo> _classInfos;
         public Dictionary<string, ClassInfo> ClassInfos { get { return _classInfos; } }
+        public string Name { get; }
 
-        public NamespaceInfo()
+        public NamespaceInfo(string name)
         {
             _classInfos = new Dictionary<string, ClassInfo>();
+            Name = name;
         }
     }
 }
