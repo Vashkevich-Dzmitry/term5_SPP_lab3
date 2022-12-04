@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AssemblyBrowser.Data
+﻿namespace AssemblyBrowser.Data
 {
     public class ClassInfo
     {
-        private Dictionary<string, MemberInfo> _memberInfos;
-        public Dictionary<string, MemberInfo> MemberInfos { get { return _memberInfos; } }
+        private List<MemberInfo> _memberInfos;
+        public List<MemberInfo> MemberInfos { get { return _memberInfos; } }
         public ClassInfo()
         {
-            _memberInfos = new Dictionary<string, MemberInfo>();
+            _memberInfos = new List<MemberInfo>();
         }
     }
 }

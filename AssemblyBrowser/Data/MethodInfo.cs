@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AssemblyBrowser.Data
+﻿namespace AssemblyBrowser.Data
 {
     public class MethodInfo : MemberInfo
     {
         public string ReturnType { get; set; }
         public string ParametersInfo { get; set; }
+
+        public MethodInfo(string name, bool isStatic, string returnType, string ParametersInfo)
+        {
+            Name = name;
+            IsStatic = isStatic;
+            ReturnType = returnType;
+            ParametersInfo = ParametersInfo;
+        }
     }
 }
